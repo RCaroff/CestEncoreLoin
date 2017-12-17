@@ -1,21 +1,32 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Location, Permissions } from 'expo'
+import axios from 'react-native-axios'
 
-export default class CELHomeScreen extends React.Component<void, {
-  coords?: {
-    latitude: number,
-    longitude: number,
-  },
-}> {
+// Google API Key : AIzaSyC4OtTByJFi4bsonK7kB4MjJJThrmncc-s
 
-  state = {}
+export default class CELHomeScreen extends React.Component {
 
-  componentWillMount() {
-    this.getLocation()
+  constructor(props) {
+    super(props)
+    this.state = {
+      coords: {
+        latitude: 0,
+        longitude: 0,
+      },
+      destinationCoords: {
+        lat: 0,
+        lng: 0,
+      },
+    }
   }
 
-  getLocation = async () => {
+  componentWillMount() {
+    this.getCurrentLocation()
+    this.getGeocode(this.props.navigation.state.params.destinationAddress)
+  }
+
+  getCurrentLocation = async () => {
     const { status } = await Permissions.askAsync(Permissions.LOCATION)
     if (status !== 'granted') {
       return
@@ -26,13 +37,30 @@ export default class CELHomeScreen extends React.Component<void, {
 
   }
 
+  getGeocode(address) {
+    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyC4OtTByJFi4bsonK7kB4MjJJThrmncc-s`)
+      .then((response) => {
+        console.log(response)
+        const destLoc = response.data.results[0].geometry.location
+        console.log(`destinationCoords : ${destLoc.lat}, ${destLoc.lng}`)
+        this.setState({
+          destinationCoords : response.data.results[0].geometry.location,
+        })
+      }).catch((error) => { // catch is called after then
+        console.log(error)
+        // this.setState({ error: error.message })
+      })
+  }
+
   render() {
     // const { params } = this.props.navigation.state
     const { coords } = this.state
+    const { destinationCoords } = this.state
     return (
 
       <View style={styles.container}>
-        <Text>{coords ? `${coords.latitude} : ${coords.longitude} : ${coords.heading}` : 'Pas de GPS'}</Text>
+        <Text>{coords ? `Votre position : ${coords.latitude}, ${coords.longitude}` : 'Pas de GPS'}</Text>
+        <Text>{destinationCoords ? `Votre destination : ${destinationCoords.lat}, ${destinationCoords.lng}` : 'Destination non trouvée'}</Text>
       </View>
     )
   }

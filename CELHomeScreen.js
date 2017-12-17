@@ -4,15 +4,13 @@ import { StyleSheet, Text, View, TextInput, Button } from 'react-native'
 export default class CELHomeScreen extends React.Component<{
   navigation: any,
 }, {
-  firstValue: string,
-  secondValue: string,
+  destinationAddress: string,
 }> {
 
   constructor(props) {
     super(props)
     this.state = {
-      firstValue: '',
-      secondValue: '',
+      destinationAddress: '',
     }
   }
 
@@ -20,31 +18,18 @@ export default class CELHomeScreen extends React.Component<{
 
     return (
       <View style={styles.container}>
-        <Text>Hello World</Text>
+        <Text>Enter your destination address</Text>
         <TextInput
           style={styles.textInputStyle}
-          onChangeText={(text) => { this.updateStateWithText(text, 0) }}
-        />
-        <TextInput
-          style={styles.textInputStyle}
-          onChangeText={(text) => { this.updateStateWithText(text, 1) }}
+          onChangeText={(text) => { this.setState({ destinationAddress:text }) }}
         />
         <Button
-          title="Details"
+          title="Go"
           onPress={() => this.props.navigation.navigate('Details', { ...this.state })}
           style={styles.buttonStyle}
         />
       </View>
     )
-  }
-
-  updateStateWithText(text, index) {
-    if (index === 0) {
-      this.setState({ firstValue: text })
-    } else {
-      this.setState({ secondValue: text })
-    }
-
   }
 }
 
@@ -58,7 +43,7 @@ const styles = StyleSheet.create({
 
   textInputStyle: {
     height: 30,
-    width: 200,
+    width: 300,
     borderColor: 'black',
     borderWidth:1,
     marginTop: 20,
