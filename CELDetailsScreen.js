@@ -18,12 +18,13 @@ export default class CELHomeScreen extends React.Component {
         lat: 0,
         lng: 0,
       },
+      distance: '',
+      duration: '',
     }
   }
 
   componentWillMount() {
     this.getCurrentLocation()
-    this.getGeocode(this.props.navigation.state.params.destinationAddress)
   }
 
   getCurrentLocation = async () => {
@@ -33,6 +34,7 @@ export default class CELHomeScreen extends React.Component {
     }
     Location.watchPositionAsync({ enableHighAccuracy: true }, ({ coords }) => {
       this.setState({ coords })
+      this.getGeocode(this.props.navigation.state.params.destinationAddress)
     })
 
   }
@@ -46,9 +48,33 @@ export default class CELHomeScreen extends React.Component {
         this.setState({
           destinationCoords : response.data.results[0].geometry.location,
         })
+        this.getDistanceAndTime()
       }).catch((error) => { // catch is called after then
         console.log(error)
         // this.setState({ error: error.message })
+      })
+  }
+
+  getDistanceAndTime() {
+    axios.get('https://maps.googleapis.com/maps/api/distancematrix/json', {
+      params: {
+        units: 'metric',
+        origins: `${this.state.coords.latitude},${this.state.coords.longitude}`,
+        destinations: `${this.state.destinationCoords.lat},${this.state.destinationCoords.lng}`,
+        language: 'fr',
+        key: 'AIzaSyC4OtTByJFi4bsonK7kB4MjJJThrmncc-s',
+      },
+    })
+      .then((response) => {
+        console.log(response)
+        const { distance, duration } = response.data.rows[0].elements[0]
+        this.setState({
+          distance: distance.text,
+          duration: duration.text,
+        })
+      })
+      .catch((error) => {
+        console.log(`error getting distance and time : ${error}`)
       })
   }
 
@@ -61,6 +87,8 @@ export default class CELHomeScreen extends React.Component {
       <View style={styles.container}>
         <Text>{coords ? `Votre position : ${coords.latitude}, ${coords.longitude}` : 'Pas de GPS'}</Text>
         <Text>{destinationCoords ? `Votre destination : ${destinationCoords.lat}, ${destinationCoords.lng}` : 'Destination non trouvée'}</Text>
+        <Text>{`Temps restant : ${this.state.duration}`}</Text>
+        <Text>{`Distance restante : ${this.state.distance}`}</Text>
       </View>
     )
   }
@@ -72,13 +100,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-
-  textInputStyle: {
-    height: 30,
-    width: 200,
-    borderColor: 'black',
-    borderWidth:1,
-    paddingTop: 20,
   },
 })
