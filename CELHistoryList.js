@@ -12,13 +12,15 @@ export default class CELHistoryList extends React.PureComponent {
     }
   }
 
-  onPressCELItem = this.props.onSelectDestination
+  onPressCELItem = (desti) => {
+    this.props.onSelectDestination(desti)
+  }
 
   renderCELItem = ({ item }) => (
     <CELHistoryListItem
       id={item.key}
       title={item.key}
-      onPressItem={this.onPressCELItem}
+      onPressItem={() => this.onPressCELItem(item.key)}
     />
   )
 

@@ -11,7 +11,7 @@ export default class CELHistoryListItem extends React.PureComponent<{
   render() {
     const textColor = this.props.selected ? 'red' : 'black'
     return (
-      <TouchableOpacity onPress={this.onPress}>
+      <TouchableOpacity onPress={() => this.onPress()}>
         <View>
           <Text style={{ color : textColor }}>
             {this.props.title}
