@@ -17,9 +17,10 @@ export default class CELHomeScreen extends React.Component<{
   }
 
   selectDestination = (destinationAddress) => {
-    this.setState({ destinationAddress })
-    console.log(`passed destination : ${destinationAddress} | drestinationAddress : ${this.state.destinationAddress}`)
-    this.goToSelectedDestination()
+    this.setState({ destinationAddress }, () => {
+      console.log(`passed destination : ${destinationAddress} | drestinationAddress : ${this.state.destinationAddress}`)
+      this.goToSelectedDestination()
+    })
   }
 
   goToSelectedDestination = () => {
@@ -27,7 +28,6 @@ export default class CELHomeScreen extends React.Component<{
   }
 
   render() {
-
     return (
       <View style={styles.container}>
         <Text style={styles.labelStyle}>Enter your destination address</Text>
@@ -37,7 +37,7 @@ export default class CELHomeScreen extends React.Component<{
         />
         <Button
           title="Go"
-          onPress={() => this.goToSelectedDestination}
+          onPress={() => this.goToSelectedDestination()}
           style={styles.buttonStyle}
         />
         <CELHistoryList
