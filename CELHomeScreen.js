@@ -1,5 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native'
+import CELHistoryList from './CELHistoryList'
+
 
 export default class CELHomeScreen extends React.Component<{
   navigation: any,
@@ -14,6 +16,15 @@ export default class CELHomeScreen extends React.Component<{
     }
   }
 
+  selectDestination = (destinationAddress) => {
+    this.setState({ destinationAddress })
+    console.log(`passed destination : ${destinationAddress} | drestinationAddress : ${this.state.destinationAddress}`)
+  }
+
+  goToSelectedDestination = () => {
+    this.props.navigation.navigate('Details', { ...this.state })
+  }
+
   render() {
 
     return (
@@ -25,8 +36,11 @@ export default class CELHomeScreen extends React.Component<{
         />
         <Button
           title="Go"
-          onPress={() => this.props.navigation.navigate('Details', { ...this.state })}
+          onPress={this.goToSelectedDestination}
           style={styles.buttonStyle}
+        />
+        <CELHistoryList
+          onSelectDestination={this.selectDestination}
         />
       </View>
     )
