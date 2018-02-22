@@ -18,7 +18,7 @@ export default class CELHomeScreen extends React.Component<{
 
     return (
       <View style={styles.container}>
-        <Text>Enter your destination address</Text>
+        <Text style={styles.labelStyle}>Enter your destination address</Text>
         <TextInput
           style={styles.textInputStyle}
           onChangeText={(text) => { this.setState({ destinationAddress:text }) }}
@@ -36,21 +36,30 @@ export default class CELHomeScreen extends React.Component<{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#eee',
+  },
+  labelStyle: {
+    marginTop: 30,
   },
 
   textInputStyle: {
     height: 30,
-    width: 300,
-    borderColor: 'black',
+    width: 250,
+    borderColor: '#ddd',
     borderWidth:1,
     marginTop: 20,
     paddingLeft: 10,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+    borderBottomLeftRadius: 5,
+    borderBottomWidth: 2,
+    alignItems: 'center',
+    backgroundColor: '#fff',
   },
 
   buttonStyle: {
-    marginTop: 20,
+    marginTop: 40,
   },
 })
