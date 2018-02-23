@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native'
 import CELHistoryList from './CELHistoryList'
-
+import axios from 'react-native-axios'
 
 export default class CELHomeScreen extends React.Component<{
   navigation: any,
@@ -13,7 +13,21 @@ export default class CELHomeScreen extends React.Component<{
     super(props)
     this.state = {
       destinationAddress: '',
+      history: [],
     }
+  }
+
+  componentWillMount() {
+    this.getHistory()
+  }
+
+  getHistory = () => {
+    axios.get('http://localhost:1337')
+      .then((response) => {
+        console.log(`destination response : ${JSON.stringify(response)}`)
+        this.setState({ history:response.history })
+
+      })
   }
 
   selectDestination = (destinationAddress) => {
@@ -42,6 +56,7 @@ export default class CELHomeScreen extends React.Component<{
         />
         <CELHistoryList
           onSelectDestination={desti => this.selectDestination(desti)}
+          datas={this.state.history}
         />
       </View>
     )

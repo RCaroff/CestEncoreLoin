@@ -2,14 +2,29 @@ import React from 'react'
 import { FlatList } from 'react-native'
 import PropTypes from 'prop-types'
 import CELHistoryListItem from './CELHistoryListItem'
+import axios from 'react-native-axios'
 
 export default class CELHistoryList extends React.PureComponent {
 
   constructor(props) {
     super(props)
     this.state = {
-      data : [{ key:'Marseille' }, { key:'Strasbourg' }, { key:'Rennes' }],
+      history: [],
     }
+  }
+
+  historyKeyExtractor = (item, index) => item.destination
+
+  componentWillMount() {
+    this.getHistory()
+  }
+
+  getHistory = () => {
+    axios.get('http://localhost:1337')
+      .then((response) => {
+        console.log(`destination response : ${JSON.stringify(response)}`)
+        this.setState({ history:response.data.history })
+      })
   }
 
   onPressCELItem = (desti) => {
@@ -18,18 +33,19 @@ export default class CELHistoryList extends React.PureComponent {
 
   renderCELItem = ({ item }) => (
     <CELHistoryListItem
-      id={item.key}
-      title={item.key}
-      onPressItem={() => this.onPressCELItem(item.key)}
+      id={item.destination}
+      title={item.destination}
+      onPressItem={() => this.onPressCELItem(item.destination)}
     />
   )
 
   render() {
     return (
       <FlatList
-        data={this.state.data}
+        data={this.state.history}
         extraData={this.state}
         renderItem={this.renderCELItem}
+        keyExtractor={this.historyKeyExtractor}
       />
     )
   }
