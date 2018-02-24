@@ -13,17 +13,22 @@ export default class CELHistoryList extends React.PureComponent {
     }
   }
 
-  historyKeyExtractor = (item, index) => item.destination
+  historyKeyExtractor = (item, index) => item._id
 
   componentWillMount() {
     this.getHistory()
   }
 
   getHistory = () => {
-    axios.get('http://localhost:1337')
+    axios.get('http://localhost:1337/api/history')
       .then((response) => {
-        console.log(`destination response : ${JSON.stringify(response)}`)
-        this.setState({ history:response.data.history })
+        console.log(`destination response : ${JSON.stringify(response.data)}`)
+        console.log(`address of first : ${response.data.history[0].address}`)
+        console.log(`history after filtering : ${JSON.stringify(response.data.history)}`)
+        this.setState({history: response.data.history})
+      })
+      .catch((err) => {
+        console.log(err)
       })
   }
 
@@ -33,9 +38,9 @@ export default class CELHistoryList extends React.PureComponent {
 
   renderCELItem = ({ item }) => (
     <CELHistoryListItem
-      id={item.destination}
-      title={item.destination}
-      onPressItem={() => this.onPressCELItem(item.destination)}
+      id={item._id}
+      title={item.address}
+      onPressItem={() => this.onPressCELItem(item.address)}
     />
   )
 

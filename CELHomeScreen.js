@@ -13,20 +13,23 @@ export default class CELHomeScreen extends React.Component<{
     super(props)
     this.state = {
       destinationAddress: '',
-      history: [],
     }
   }
 
-  componentWillMount() {
-    this.getHistory()
-  }
 
-  getHistory = () => {
-    axios.get('http://localhost:1337')
+  postDestination = (callback) => {
+    axios.post('http://localhost:1337/api/history', {
+      params: {
+        address: this.state.destinationAddress,
+      },
+    })
       .then((response) => {
-        console.log(`destination response : ${JSON.stringify(response)}`)
-        this.setState({ history:response.history })
-
+        console.log(response)
+        callback(true)
+      })
+      .catch((err) => {
+        console.log(err)
+        callback(false)
       })
   }
 
@@ -38,7 +41,11 @@ export default class CELHomeScreen extends React.Component<{
   }
 
   goToSelectedDestination = () => {
-    this.props.navigation.navigate('Details', { ...this.state })
+    this.postDestination((success) => {
+      if (success) {
+        this.props.navigation.navigate('Details', { ...this.state })
+      }
+    })
   }
 
   render() {
