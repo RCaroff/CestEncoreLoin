@@ -8,29 +8,9 @@ export default class CELHistoryList extends React.PureComponent {
 
   constructor(props) {
     super(props)
-    this.state = {
-      history: [],
-    }
   }
 
-  historyKeyExtractor = (item, index) => item._id
-
-  componentWillMount() {
-    this.getHistory()
-  }
-
-  getHistory = () => {
-    axios.get('http://localhost:1337/api/history')
-      .then((response) => {
-        console.log(`destination response : ${JSON.stringify(response.data)}`)
-        console.log(`address of first : ${response.data.history[0].address}`)
-        console.log(`history after filtering : ${JSON.stringify(response.data.history)}`)
-        this.setState({history: response.data.history})
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
+  historyKeyExtractor = (item, index) => item._id || item
 
   onPressCELItem = (desti) => {
     this.props.onSelectDestination(desti)
@@ -47,8 +27,7 @@ export default class CELHistoryList extends React.PureComponent {
   render() {
     return (
       <FlatList
-        data={this.state.history}
-        extraData={this.state}
+        data={this.props.data}
         renderItem={this.renderCELItem}
         keyExtractor={this.historyKeyExtractor}
       />

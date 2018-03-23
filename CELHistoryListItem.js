@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
 export default class CELHistoryListItem extends React.PureComponent<{
   onPressItem: any
@@ -12,7 +12,7 @@ export default class CELHistoryListItem extends React.PureComponent<{
     const textColor = this.props.selected ? 'red' : 'black'
     return (
       <TouchableOpacity onPress={() => this.onPress()}>
-        <View>
+        <View style={styles.container}>
           <Text style={{ color : textColor }}>
             {this.props.title}
           </Text>
@@ -21,3 +21,14 @@ export default class CELHistoryListItem extends React.PureComponent<{
     )
   }
 }
+
+const styles = StyleSheet.create({
+
+  container: {
+    height: 33,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+
+})
