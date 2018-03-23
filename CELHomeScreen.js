@@ -13,7 +13,7 @@ export default class CELHomeScreen extends React.Component<{
     super(props)
     this.state = {
       destinationAddress: '',
-      history: []
+      history: [],
     }
   }
 
@@ -30,10 +30,10 @@ export default class CELHomeScreen extends React.Component<{
       .then((response) => {
         const newCity = {
           _id: response.data.destination,
-          address: response.data.destination
+          address: response.data.destination,
         }
 
-        this.setState({history: [...this.state.history, newCity]})
+        this.setState({ history: [...this.state.history, newCity] })
         callback(true)
       })
       .catch((err) => {
@@ -64,7 +64,7 @@ export default class CELHomeScreen extends React.Component<{
         console.log(`destination response : ${JSON.stringify(response.data)}`)
         console.log(`address of first : ${response.data.history[0].address}`)
         console.log(`history after filtering : ${JSON.stringify(response.data.history)}`)
-        this.setState({history: response.data.history})
+        this.setState({ history: response.data.history })
       })
       .catch((err) => {
         console.log(err)
@@ -74,29 +74,29 @@ export default class CELHomeScreen extends React.Component<{
   render() {
     return (
       <View style={styles.container}>
-      <View style={styles.labelStyle}>
-        <Text style={[styles.subtitle, styles.center]}>
+        <View style={styles.labelStyle}>
+          <Text style={[styles.subtitle, styles.center]}>
           Enter your destination address
-        </Text>
-      </View>
+          </Text>
+        </View>
         <TextInput
           style={styles.textInputStyle}
           onChangeText={(text) => { this.setState({ destinationAddress:text }) }}
-          ref={input => { this.textInput = input }}
+          ref={(input) => { this.textInput = input }}
         />
         <Button
           title="Go"
           onPress={() => this.goToSelectedDestination()}
           style={styles.buttonStyle}
         />
-        <View style={[styles.labelStyle, ]}>
+        <View style={[styles.labelStyle]}>
           <Text style={styles.subtitle}>
             History :
           </Text>
         </View>
         <CELHistoryList
           onSelectDestination={desti => this.selectDestination(desti)}
-          data = {this.state.history}
+          data={this.state.history}
         />
       </View>
     )
@@ -111,16 +111,16 @@ const styles = StyleSheet.create({
   },
 
   center: {
-    textAlign: 'center'
+    textAlign: 'center',
   },
 
   labelStyle: {
     marginTop: 30,
-    width: Dimensions.get('window').width * .8
+    width: Dimensions.get('window').width * 0.8,
   },
 
   subtitle: {
-    fontSize: 16
+    fontSize: 16,
   },
 
   textInputStyle: {
